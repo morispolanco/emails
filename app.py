@@ -77,14 +77,18 @@ def main():
     if save_excel:
         name_the_file = st.text_input("Nombre del archivo en el que le gustaría guardar los datos (no incluya .xlsx): ")
 
-    try:
-        page = urlopen(webpage)
-        start_scrape(page)
-    except:
-        hdr = {'User-Agent': 'Mozilla/5.0'}
-        req = Request(webpage, headers=hdr)
-        page = urlopen(req)
-        start_scrape(page, name_the_file)
+    if st.button("Raspar"):
+        if not webpage.startswith('http://') and not webpage.startswith('https://'):
+            st.write("La URL debe comenzar con 'http://' o 'https://'")
+            return
+
+        try:
+            hdr = {'User-Agent': 'Mozilla/5.0'}
+            req = Request(webpage, headers=hdr)
+            page = urlopen(req)
+            start_scrape(page, name_the_file)
+        except Exception as e:
+            st.write(f"No se pudo abrir la URL: {str(e)}")
 
 if __name__ == "__main__":
     main()
